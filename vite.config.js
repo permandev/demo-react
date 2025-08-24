@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/demo-react/',
   define: {
     global: 'globalThis',
     'process.env': {},  // บาง lib เก่าจะอ้างถึง process.env
