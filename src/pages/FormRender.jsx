@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DynamicFormMUI from '../components/DynamicFormMUI'
+import { USE_LOCAL_DATA, fetchFrom } from '../helper/form.util.js';
+
+
 export default function FormRender() {
 
   const [formData, setFormData] = useState([]);
   
-     useEffect(() => {
+  useEffect(() => {
       (async () => {
-        const res = await fetch('http://localhost:3000/forms/3', {
-          // headers: { Authorization: 'Bearer ...' },
-        });
-        const payload = await res.json();
-  
-        // normalize ให้เป็น array ตรง ๆ
-        const items = Array.isArray(payload)
-          ? payload
-          : payload?.task_data ?? payload?.data ?? [];
-  
-        setFormData(items);
+        let data = await fetchFrom(3, USE_LOCAL_DATA);
+        //console.log('fetched form data', data);
+        setFormData(data);
       })();
-    }, []);
+  }, []);
 
   const handleSubmit = (data) => {
     console.log('Form data:', data)

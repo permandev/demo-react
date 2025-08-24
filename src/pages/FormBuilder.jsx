@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ReactFormBuilder } from 'react-form-builder2';
+import { USE_LOCAL_DATA, fetchFrom, updateForm } from '../helper/form.util.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-form-builder2/dist/app.css';
@@ -8,27 +9,19 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 export default function FormBuilder() {
 
   const [formData, setFormData] = useState([]);
+  //const [keyByIds, setKeyByIds] = useState("");
 
-   useEffect(() => {
+  useEffect(() => {
     (async () => {
-      const res = await fetch('http://localhost:3000/forms/3', {
-        // headers: { Authorization: 'Bearer ...' },
-      });
-      const payload = await res.json();
-
-      // normalize ให้เป็น array ตรง ๆ
-      const items = Array.isArray(payload)
-        ? payload
-        : payload?.task_data ?? payload?.data ?? [];
-
-      setFormData(items);
+      let data = await fetchFrom(3, USE_LOCAL_DATA);
+      setFormData(data);
     })();
   }, []);
-// ยังโหลดอยู่ → ยังไม่ render Builder
-  if (!formData) return null;
 
-  // ใช้ key บังคับให้ remount ถ้า data เปลี่ยน
+  if (!formData) return null;
   const keyByIds = formData.map(i => i.id).join('|');
+
+  console.log('test');
 
   return (
     <div>
@@ -38,12 +31,8 @@ export default function FormBuilder() {
         key={keyByIds}
         edit
         data={formData}
-        onPost={(data) =>
-          fetch('http://localhost:3000/forms/3', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' /*, Authorization: 'Bearer ...'*/ },
-            body: JSON.stringify(data),
-          })
+        onPost={async (data) =>
+          await updateForm(3, data, USE_LOCAL_DATA)
         }
       />
     </div>
