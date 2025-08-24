@@ -36,7 +36,7 @@ export default function App() {
             >
               <li><Link style={linkStyle} to="/">Home</Link></li>
               <li><Link style={linkStyle} to="/builder">Form Builder</Link></li>
-              <li><Link style={linkStyle} to="/render">Form Renderer</Link></li>
+              <li><Link style={linkStyle} to="/render">Form Render</Link></li>
               {/* <li><Link style={linkStyle} to="/test">Test</Link></li> */}
             </ul>
           </nav>
